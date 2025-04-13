@@ -1,33 +1,25 @@
 import os
 import tweepy
 
-# Load from environment variables
+print("\n🔍 Testing individual credentials:")
+
 API_KEY = os.getenv("API_KEY")
 API_SECRET = os.getenv("API_SECRET")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 ACCESS_SECRET = os.getenv("ACCESS_SECRET")
 
-def test_credential(name, value):
-    if not value:
-        print(f"❌ {name} is missing (None or empty)")
-    else:
-        print(f"✅ {name} is set")
+print("✅ API_KEY is set:", API_KEY[:4] + "..." if API_KEY else "❌ MISSING")
+print("✅ API_SECRET is set:", API_SECRET[:4] + "..." if API_SECRET else "❌ MISSING")
+print("✅ ACCESS_TOKEN is set:", ACCESS_TOKEN[:4] + "..." if ACCESS_TOKEN else "❌ MISSING")
+print("✅ ACCESS_SECRET is set:", ACCESS_SECRET[:4] + "..." if ACCESS_SECRET else "❌ MISSING")
 
-def test_twitter_auth():
-    print("\n🔍 Testing individual credentials:")
-    test_credential("API_KEY", API_KEY)
-    test_credential("API_SECRET", API_SECRET)
-    test_credential("ACCESS_TOKEN", ACCESS_TOKEN)
-    test_credential("ACCESS_SECRET", ACCESS_SECRET)
+print("\n🔐 Testing OAuth1 connection to Twitter...")
 
-    print("\n🔐 Testing OAuth1 connection to Twitter...")
-    try:
-        auth = tweepy.OAuth1UserHandler(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET)
-        api = tweepy.API(auth)
-        api.verify_credentials()
-        print("✅ Twitter OAuth 1.0a authentication SUCCESSFUL.")
-    except Exception as e:
-        print(f"❌ Twitter OAuth authentication FAILED: {e}")
-
-if __name__ == "__main__":
-    test_twitter_auth()
+try:
+    auth = tweepy.OAuth1UserHandler(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET)
+    api = tweepy.API(auth)
+    user = api.verify_credentials()
+    print("✅ Twitter OAuth authentication successful.")
+    print(f"🔁 Authenticated as: @{user.screen_name}")
+except Exception as e:
+    print("❌ Twitter OAuth authentication FAILED:", e)
