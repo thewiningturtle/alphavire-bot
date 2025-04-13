@@ -3,21 +3,23 @@ from bs4 import BeautifulSoup
 
 def clean_text(text):
     """
-    Clean the given text by removing HTML tags, URLs, and extra spaces.
+    Remove HTML tags, extra spaces, and unwanted characters from the summary.
     """
     soup = BeautifulSoup(text, "html.parser")
     cleaned = soup.get_text()
-    cleaned = re.sub(r"http\S+", "", cleaned)  # remove URLs
-    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    cleaned = re.sub(r'\s+', ' ', cleaned)  # collapse multiple spaces
+    cleaned = cleaned.strip()
     return cleaned
 
 def extract_summary(entry):
     """
-    Extract and clean summary text from RSS feed entry.
+    Extract a meaningful summary from the RSS feed entry.
     """
-    if hasattr(entry, "summary"):
+    if hasattr(entry, 'summary') and entry.summary:
         return clean_text(entry.summary)
-    elif hasattr(entry, "description"):
+    elif hasattr(entry, 'description') and entry.description:
         return clean_text(entry.description)
+    elif hasattr(entry, 'content') and entry.content:
+        return clean_text(entry.content[0].value)
     else:
-        return ""
+        return "No summary available."
