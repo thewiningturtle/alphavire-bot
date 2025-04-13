@@ -20,6 +20,6 @@ try:
     api = tweepy.API(auth)
     user = api.verify_credentials()
     print("✅ Twitter OAuth authentication successful.")
-    print(f"🔁 Authenticated as: @{user.screen_name}")
+    print(f"🔁 Authenticated as: @{user.screen_name}")  # ← Pro Tip: Displays the Twitter handle
 except Exception as e:
     print("❌ Twitter OAuth authentication FAILED:", e)
