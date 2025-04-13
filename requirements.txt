@@ -1,0 +1,7 @@
+tweepy
+feedparser
+schedule
+requests
+flask
+beautifulsoup4
+openai
